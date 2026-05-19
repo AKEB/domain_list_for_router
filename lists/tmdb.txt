@@ -1,0 +1,13 @@
+themoviedb.org
+tmdb.org
+tmdb-image-prod.b-cdn.net
+image.tmdb.org
+imdb
+boxofficemojo.com
+imdb.com
+imdb.to
+media-imdb.com
+13.227.219.0/24
+108.157.229.0/24
+65.9.175.0/24
+99.84.152.0/24

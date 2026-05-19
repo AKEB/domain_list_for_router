@@ -1,0 +1,11 @@
+www.digitalocean.com
+digitalocean.com
+www.digitaloceanspaces.com
+digitaloceanspaces.com
+do.co
+nginxconfig.io
+cloud.digitalocean.com
+api.digitalocean.com
+cloudsupport.digitalocean.com
+104.19.0.0/16
+35.158.127.0/24

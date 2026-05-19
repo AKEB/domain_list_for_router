@@ -1,0 +1,9 @@
+myip.com
+ifconfig.me
+pagead2.googlesyndication.com
+172.253.130.0/24
+googleads.g.doubleclick.net
+64.233.164.0/24
+172.217.168.194
+2a00:1450:400e:800::2002
+networksdb.io

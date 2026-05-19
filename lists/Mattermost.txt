@@ -1,0 +1,8 @@
+docs.mattermost.com
+mattermost.com
+www.mattermost.com
+d3r1ild9aa68qq.cloudfront.net
+18.165.122.0/24
+8.6.112.6
+8.47.69.6
+pdat.matterlytics.com

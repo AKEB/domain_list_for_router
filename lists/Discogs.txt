@@ -1,0 +1,10 @@
+login.discogs.com
+discogs.com
+www.discogs.com
+login.discogs.com.cdn.cloudflare.net
+www.discogs.com.cdn.cloudflare.net
+172.64.151.54
+104.18.36.202
+54.203.49.235
+52.35.165.114
+35.81.197.58
