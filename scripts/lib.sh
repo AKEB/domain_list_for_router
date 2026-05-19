@@ -133,17 +133,13 @@ build_create_domain_list_commands() {
   local -n _domains="$3"
   local iface="${ROUTER_DNS_ROUTE_INTERFACE:-Wireguard0}"
 
-  echo "configure"
   echo "object-group fqdn ${group}"
-  format_description_line "$description"
+  format_description_command "$group" "$description"
   for domain in "${_domains[@]}"; do
     [[ -n "$domain" ]] || continue
-    echo "    include ${domain}"
+    echo "object-group fqdn ${group} include ${domain}"
   done
-  echo "exit"
-  echo "dns-proxy"
-  echo "    route object-group ${group} ${iface} auto"
-  echo "exit"
+  echo "dns-proxy route object-group ${group} ${iface} auto"
   echo "system configuration save"
 }
 
@@ -151,14 +147,10 @@ build_delete_domain_list_commands() {
   local group="$1"
   local iface="$2"
 
-  echo "configure"
   if [[ -n "$iface" ]]; then
-    echo "dns-proxy"
-    echo "    no route object-group ${group} ${iface} auto"
-    echo "exit"
+    echo "no dns-proxy route object-group ${group} ${iface} auto"
   fi
   echo "no object-group fqdn ${group}"
-  echo "exit"
   echo "system configuration save"
 }
 
@@ -177,11 +169,15 @@ router_ssh() {
       -o ConnectTimeout=15 \
       "${ROUTER_USER:-admin}@${ROUTER_HOST:?ROUTER_HOST is not set}" "$@"
   else
-    sshpass -e ssh \
-      -o StrictHostKeyChecking=no \
-      -o UserKnownHostsFile=/dev/null \
-      -o ConnectTimeout=15 \
-      "${ROUTER_USER:-admin}@${ROUTER_HOST:?ROUTER_HOST is not set}"
+    local line
+    while IFS= read -r line; do
+      [[ -n "$line" ]] || continue
+      sshpass -e ssh \
+        -o StrictHostKeyChecking=no \
+        -o UserKnownHostsFile=/dev/null \
+        -o ConnectTimeout=15 \
+        "${ROUTER_USER:-admin}@${ROUTER_HOST:?ROUTER_HOST is not set}" "$line"
+    done
   fi
 }
 
@@ -191,36 +187,46 @@ router_shell_ssh() {
 
 fetch_router_includes() {
   local group="$1"
-  router_ssh "show object-group fqdn ${group}" 2>/dev/null \
-    | awk '/^[[:space:]]+include / { print $2 }' || true
+  router_ssh "show running-config" \
+    | awk -v g="$group" '
+      $0 == "object-group fqdn " g { in_group = 1; next }
+      in_group && /^object-group fqdn / { in_group = 0 }
+      in_group && /^[[:space:]]+include / { print $2 }
+    ' || true
+}
+
+format_description_command() {
+  local group="$1"
+  local description="$2"
+  if [[ "$description" == *" "* ]]; then
+    printf '%s\n' "object-group fqdn ${group} description \"${description}\""
+  else
+    printf '%s\n' "object-group fqdn ${group} description ${description}"
+  fi
 }
 
 format_description_line() {
   local description="$1"
   if [[ "$description" == *" "* ]]; then
-    printf '    description "%s"' "$description"
+    printf '%s\n' "    description \"${description}\""
   else
-    printf '    description %s' "$description"
+    printf '%s\n' "    description ${description}"
   fi
 }
-
 build_router_commands() {
   local group="$1"
   local description="$2"
   local -n _remove="$3"
   local -n _add="$4"
 
-  echo "configure"
-  echo "object-group fqdn ${group}"
-  format_description_line "$description"
+  format_description_command "$group" "$description"
   for domain in "${_remove[@]}"; do
     [[ -n "$domain" ]] || continue
-    echo "    no include ${domain}"
+    echo "no object-group fqdn ${group} include ${domain}"
   done
   for domain in "${_add[@]}"; do
     [[ -n "$domain" ]] || continue
-    echo "    include ${domain}"
+    echo "object-group fqdn ${group} include ${domain}"
   done
-  echo "exit"
   echo "system configuration save"
 }
