@@ -1,22 +1,28 @@
 # domain_list_for_router
 
-Списки доменов для Keenetic (object-group fqdn). Имя файла в `lists/` = поле `description` в конфиге роутера.
+Списки доменов для Keenetic (`object-group fqdn`). Имя файла в `lists/` = поле `description` на роутере (без `.txt`).
 
-## Синхронизация на роутер
+## Установка на gate-сервере
 
-На сервере с git нужны `sshpass` и SSH-доступ к Keenetic (`ROUTER_*` в `.env`). На роутере — каталог `REMOTE_REPO_DIR` для скриптов и списков.
+Репозиторий и скрипт синхронизации лежат в **`/root/domain_list_for_router`** (путь задан в `sync-on-gate.sh`).
 
 ```bash
+git clone git@github.com:AKEB/domain_list_for_router.git /root/domain_list_for_router
+cd /root/domain_list_for_router
+
 cp .env.example .env
-# отредактировать .env
+# ROUTER_HOST, ROUTER_USER, ROUTER_PASSWORD
 
-chmod +x scripts/*.sh
+chmod +x sync-on-gate.sh scripts/*.sh
 
-# один проход
-./scripts/sync-domains.sh once
+# один проход после git push
+./sync-on-gate.sh once
 
 # фоновый опрос git (каждые 60 с)
-./scripts/sync-domains.sh watch
+./sync-on-gate.sh watch
+
+# первичная синхронизация всех lists/*.txt (один снимок конфига роутера)
+./sync-on-gate.sh bootstrap-all
 ```
 
 ### systemd (опционально)
@@ -28,8 +34,8 @@ After=network-online.target
 
 [Service]
 Type=simple
-WorkingDirectory=/opt/domain_list_for_router
-ExecStart=/opt/domain_list_for_router/scripts/sync-domains.sh watch
+WorkingDirectory=/root/domain_list_for_router
+ExecStart=/root/domain_list_for_router/sync-on-gate.sh watch
 Restart=always
 RestartSec=10
 
@@ -39,15 +45,47 @@ WantedBy=multi-user.target
 
 ## Как это работает
 
-1. `sync-domains.sh` делает `git pull` из `git@github.com:AKEB/domain_list_for_router.git`.
-2. При изменениях в `lists/*.txt` копирует файлы на роутер и вызывает `apply-domain-list.sh`.
-3. **Новый файл** в `lists/` — создаётся `object-group fqdn` (свободный `domain-listN`), все домены из файла и маршрут `dns-proxy` (интерфейс из `ROUTER_DNS_ROUTE_INTERFACE`, по умолчанию `Wireguard0`).
-4. **Изменённый файл** — обновляются только изменившиеся `include`.
-5. **Удалённый файл** — удаляются маршрут `dns-proxy` и `object-group` с роутера.
+1. `sync-on-gate.sh` на gate делает `git pull` из `git@github.com:AKEB/domain_list_for_router.git`.
+2. Если в git изменились файлы в `lists/`, один раз снимает `show running-config` и строит снимок всех `domain-listN`, `description`, `include` и `dns-proxy route`. Без изменений в `lists/` роутер не трогается.
+3. Для изменённых/новых/удалённых файлов в `lists/` собирает команды Keenetic CLI и отправляет **по одной строке** по SSH (пауза `ROUTER_COMMAND_DELAY`, по умолчанию 0.1 с).
+4. В конце — одна команда `system configuration save`.
 
-Имя файла = поле `description` на роутере (без `.txt`). Для другого VPN укажите в `.env`, например `ROUTER_DNS_ROUTE_INTERFACE=OpenVPN0`.
+| Событие в git | Действие на роутере |
+|---------------|---------------------|
+| Новый файл | Свободный `domain-listN`, `description`, все `include`, маршрут `dns-proxy` |
+| Изменённый файл | Только diff (`no include` / `include`) |
+| Удалённый файл | `dns-proxy no route …`, `no object-group fqdn …` |
+
+Для новых списков интерфейс VPN задаётся в `.env`: `ROUTER_DNS_ROUTE_INTERFACE` (по умолчанию `Wireguard0`).
+
+### Проверка без применения
+
+```bash
+DRY_RUN=1 ./sync-on-gate.sh once
+```
+
+## Переменные `.env`
+
+| Переменная | Назначение |
+|------------|------------|
+| `ROUTER_HOST` | IP роутера |
+| `ROUTER_USER` | SSH-пользователь (обычно `admin`) |
+| `ROUTER_PASSWORD` | Пароль SSH |
+| `ROUTER_DNS_ROUTE_INTERFACE` | VPN для новых списков |
+| `ROUTER_COMMAND_DELAY` | Пауза между командами CLI (сек) |
+| `GIT_BRANCH` | Ветка для pull (по умолчанию `main`) |
+| `CHECK_INTERVAL` | Интервал `watch` (сек) |
+
+## Ручное применение одного списка
+
+Скрипты в `scripts/` (тот же `.env`, те же `ROUTER_*`):
+
+```bash
+./scripts/apply-domain-list.sh lists/openAI.txt
+./scripts/delete-domain-list.sh lists/openAI.txt
+```
 
 ## Зависимости
 
 - `git`, `bash`, `sshpass`, `openssh-client`
-- На роутере: включён SSH (компонент «Сервер SSH»), пользователь с правом изменения конфигурации
+- На роутере: компонент «Сервер SSH», пользователь с правом изменения конфигурации

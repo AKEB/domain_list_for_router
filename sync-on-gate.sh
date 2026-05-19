@@ -289,12 +289,6 @@ apply_batch() {
   local -a deleted=()
   local tmpdir config_file records_file commands_file includes_dir rel
 
-  tmpdir="$(mktemp -d)"
-  config_file="$tmpdir/running-config"
-  records_file="$tmpdir/router-records.tsv"
-  commands_file="$tmpdir/router-commands.txt"
-  includes_dir="$tmpdir/includes"
-
   while ((${#files[@]} > 0)); do
     rel="${files[0]}"
     files=("${files[@]:1}")
@@ -311,6 +305,16 @@ apply_batch() {
     esac
   done
 
+  if ((${#changed[@]} == 0 && ${#deleted[@]} == 0)); then
+    return 0
+  fi
+
+  tmpdir="$(mktemp -d)"
+  config_file="$tmpdir/running-config"
+  records_file="$tmpdir/router-records.tsv"
+  commands_file="$tmpdir/router-commands.txt"
+  includes_dir="$tmpdir/includes"
+
   load_router_snapshot "$config_file" "$records_file"
   load_router_indexes "$records_file" "$includes_dir"
   if ((${#changed[@]} > 0 && ROUTER_GROUP_COUNT == 0)); then
@@ -323,22 +327,9 @@ apply_batch() {
   rm -rf "$tmpdir"
 }
 
-process_changes() {
-  local old_head="$1" new_head="$2"
-  local -a files=() deleted=()
-  mapfile -t files < <(changed_list_files "$old_head" "$new_head")
-  mapfile -t deleted < <(deleted_list_files "$old_head" "$new_head")
-
-  if ((${#files[@]} == 0 && ${#deleted[@]} == 0)); then
-    log "no list changes"
-    return 0
-  fi
-
-  apply_batch "${files[@]}" --deleted "${deleted[@]}"
-}
-
 run_once() {
   local old_head new_remote_head new_head
+  local -a files=() deleted=()
   old_head="$(git rev-parse HEAD)"
   git fetch "$GIT_REMOTE" "$GIT_BRANCH" --quiet
   new_remote_head="$(git rev-parse "$GIT_REMOTE/$GIT_BRANCH")"
@@ -348,10 +339,19 @@ run_once() {
     return 0
   fi
 
+  mapfile -t files < <(changed_list_files "$old_head" "$new_remote_head")
+  mapfile -t deleted < <(deleted_list_files "$old_head" "$new_remote_head")
+
+  if ((${#files[@]} == 0 && ${#deleted[@]} == 0)); then
+    git merge --ff-only "$GIT_REMOTE/$GIT_BRANCH"
+    log "git updated: ${old_head:0:7} -> ${new_remote_head:0:7}, no list changes — skip router"
+    return 0
+  fi
+
   git merge --ff-only "$GIT_REMOTE/$GIT_BRANCH"
   new_head="$(git rev-parse HEAD)"
-  log "updated: ${old_head:0:7} -> ${new_head:0:7}"
-  process_changes "$old_head" "$new_head"
+  log "updated: ${old_head:0:7} -> ${new_head:0:7}, lists: ${#files[@]} changed, ${#deleted[@]} deleted"
+  apply_batch "${files[@]}" --deleted "${deleted[@]}"
 }
 
 bootstrap_all() {
