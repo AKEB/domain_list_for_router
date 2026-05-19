@@ -13,7 +13,7 @@ cd /root/domain_list_for_router
 cp .env.example .env
 # ROUTER_HOST, ROUTER_USER, ROUTER_PASSWORD
 
-chmod +x sync-on-gate.sh scripts/*.sh
+chmod +x sync-on-gate.sh
 
 # один проход после git push
 ./sync-on-gate.sh once
@@ -75,15 +75,6 @@ DRY_RUN=1 ./sync-on-gate.sh once
 | `ROUTER_COMMAND_DELAY` | Пауза между командами CLI (сек) |
 | `GIT_BRANCH` | Ветка для pull (по умолчанию `main`) |
 | `CHECK_INTERVAL` | Интервал `watch` (сек) |
-
-## Ручное применение одного списка
-
-Скрипты в `scripts/` (тот же `.env`, те же `ROUTER_*`):
-
-```bash
-./scripts/apply-domain-list.sh lists/openAI.txt
-./scripts/delete-domain-list.sh lists/openAI.txt
-```
 
 ## Зависимости
 

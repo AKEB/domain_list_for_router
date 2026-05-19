@@ -280,7 +280,6 @@ execute_batch_commands() {
     sleep "$ROUTER_COMMAND_DELAY"
   done <"$commands_file"
   router_ssh "system configuration save" >/dev/null
-  invalidate_router_map_cache
 }
 
 apply_batch() {
