@@ -13,6 +13,10 @@ cd /root/domain_list_for_router
 cp .env.example .env
 # ROUTER_HOST, ROUTER_USER, ROUTER_PASSWORD
 
+# опционально: не заливать все списки, а только перечисленные (см. lists.include.example)
+cp lists.include.example lists.include
+# отредактируйте lists.include — одна строка = один lists/*.txt
+
 chmod +x sync-on-gate.sh
 
 # один проход после git push
@@ -46,7 +50,7 @@ WantedBy=multi-user.target
 ## Как это работает
 
 1. `sync-on-gate.sh` на gate делает `git pull` из `git@github.com:AKEB/domain_list_for_router.git`.
-2. Если в git изменились файлы в `lists/`, один раз снимает `show running-config` и строит снимок всех `domain-listN`, `description`, `include` и `dns-proxy route`. Без изменений в `lists/` роутер не трогается.
+2. Если в git изменились файлы в `lists/`, один раз снимает `show running-config` и строит снимок всех `domain-listN`, `description`, `include` и `dns-proxy route`. Без изменений в `lists/` роутер не трогается. Если на gate есть файл `lists.include` (не в git), обрабатываются только перечисленные в нём `lists/*.txt`; остальные изменения в репозитории подтягиваются через `git merge`, но на роутер не отправляются.
 3. Для изменённых/новых/удалённых файлов в `lists/` собирает команды Keenetic CLI и отправляет **по одной строке** по SSH (пауза `ROUTER_COMMAND_DELAY`, по умолчанию 0.1 с).
 4. В конце — одна команда `system configuration save`.
 
@@ -75,6 +79,7 @@ DRY_RUN=1 ./sync-on-gate.sh once
 | `ROUTER_COMMAND_DELAY` | Пауза между командами CLI (сек) |
 | `GIT_BRANCH` | Ветка для pull (по умолчанию `main`) |
 | `CHECK_INTERVAL` | Интервал `watch` (сек) |
+| `LISTS_INCLUDE_FILE` | Путь к allowlist списков (по умолчанию `lists.include` в корне репо) |
 
 ## Зависимости
 

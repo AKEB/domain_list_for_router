@@ -14,6 +14,9 @@ fi
 # shellcheck source=scripts/lib.sh
 source "$REPO_DIR/scripts/lib.sh"
 
+# Если файл существует — на роутер попадают только перечисленные lists/*.txt (см. lists.include.example).
+LISTS_INCLUDE_FILE="${LISTS_INCLUDE_FILE:-$REPO_DIR/lists.include}"
+
 GIT_REMOTE="${GIT_REMOTE:-origin}"
 GIT_BRANCH="${GIT_BRANCH:-main}"
 CHECK_INTERVAL="${CHECK_INTERVAL:-60}"
@@ -31,6 +34,37 @@ changed_list_files() {
 deleted_list_files() {
   local from="$1" to="$2"
   git diff --name-only --diff-filter=D "$from" "$to" -- lists/ | grep '\.txt$' || true
+}
+
+list_file_enabled() {
+  local rel="$1" base line include_file
+  include_file="${LISTS_INCLUDE_FILE:-}"
+  [[ -n "$include_file" && -f "$include_file" ]] || return 0
+  base="$(basename "$rel")"
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    line="${line//$'\r'/}"
+    [[ "$line" =~ ^[[:space:]]*# ]] && continue
+    [[ -z "${line// /}" ]] && continue
+    line="${line#"${line%%[![:space:]]*}"}"
+    line="${line%"${line##*[![:space:]]}"}"
+    if [[ "$line" == "$base" || "$line" == "$rel" ]]; then
+      return 0
+    fi
+  done <"$include_file"
+  return 1
+}
+
+filter_enabled_lists() {
+  local -n _arr="$1"
+  local -a _out=()
+  local item
+  for item in "${_arr[@]}"; do
+    [[ -n "$item" ]] || continue
+    if list_file_enabled "$item"; then
+      _out+=("$item")
+    fi
+  done
+  _arr=("${_out[@]}")
 }
 
 load_router_snapshot() {
@@ -328,7 +362,7 @@ apply_batch() {
 
 run_once() {
   local old_head new_remote_head new_head
-  local -a files=() deleted=()
+  local -a files=() deleted=() raw_files=() raw_deleted=()
   old_head="$(git rev-parse HEAD)"
   git fetch "$GIT_REMOTE" "$GIT_BRANCH" --quiet
   new_remote_head="$(git rev-parse "$GIT_REMOTE/$GIT_BRANCH")"
@@ -338,10 +372,10 @@ run_once() {
     return 0
   fi
 
-  mapfile -t files < <(changed_list_files "$old_head" "$new_remote_head")
-  mapfile -t deleted < <(deleted_list_files "$old_head" "$new_remote_head")
+  mapfile -t raw_files < <(changed_list_files "$old_head" "$new_remote_head")
+  mapfile -t raw_deleted < <(deleted_list_files "$old_head" "$new_remote_head")
 
-  if ((${#files[@]} == 0 && ${#deleted[@]} == 0)); then
+  if ((${#raw_files[@]} == 0 && ${#raw_deleted[@]} == 0)); then
     git merge --ff-only "$GIT_REMOTE/$GIT_BRANCH"
     log "git updated: ${old_head:0:7} -> ${new_remote_head:0:7}, no list changes — skip router"
     return 0
@@ -349,6 +383,17 @@ run_once() {
 
   git merge --ff-only "$GIT_REMOTE/$GIT_BRANCH"
   new_head="$(git rev-parse HEAD)"
+
+  files=("${raw_files[@]}")
+  deleted=("${raw_deleted[@]}")
+  filter_enabled_lists files
+  filter_enabled_lists deleted
+
+  if ((${#files[@]} == 0 && ${#deleted[@]} == 0)); then
+    log "updated: ${old_head:0:7} -> ${new_head:0:7}, list changes in git (${#raw_files[@]} changed, ${#raw_deleted[@]} deleted) — none in ${LISTS_INCLUDE_FILE}, skip router"
+    return 0
+  fi
+
   log "updated: ${old_head:0:7} -> ${new_head:0:7}, lists: ${#files[@]} changed, ${#deleted[@]} deleted"
   apply_batch "${files[@]}" --deleted "${deleted[@]}"
 }
@@ -356,6 +401,11 @@ run_once() {
 bootstrap_all() {
   local -a files=()
   mapfile -t files < <(find lists -maxdepth 1 -type f -name "*.txt" | sort)
+  filter_enabled_lists files
+  if ((${#files[@]} == 0)); then
+    log "bootstrap-all: no lists after ${LISTS_INCLUDE_FILE:-lists.include} filter — skip router"
+    return 0
+  fi
   apply_batch "${files[@]}"
 }
 

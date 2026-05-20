@@ -1,0 +1,10 @@
+# Скопируйте в lists.include на gate (файл в .gitignore).
+# Пока lists.include нет — синхронизируются все lists/*.txt.
+#
+# Укажите только те файлы, которые нужно заливать на роутер (одна строка = один файл).
+# Допустимо имя файла или путь от корня репозитория:
+#   openAI.txt
+#   lists/openAI.txt
+#
+# openAI.txt
+# digitalocean.txt
