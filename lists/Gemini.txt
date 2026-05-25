@@ -62,7 +62,6 @@ www3.l.google.com
 216.239.38.223
 up-gemini
 app.bluedothq.com
-developers.openai.com
 stash.kopano.io
 eus.codesigning.azure.net
 codesigning.azure.net
