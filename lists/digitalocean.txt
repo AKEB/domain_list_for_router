@@ -9,5 +9,3 @@ api.digitalocean.com
 cloudsupport.digitalocean.com
 104.19.0.0/16
 35.158.127.0/24
-mm-imgproxy.dev-my.games
-128.199.52.241
