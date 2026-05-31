@@ -9,3 +9,5 @@ api.digitalocean.com
 cloudsupport.digitalocean.com
 104.19.0.0/16
 35.158.127.0/24
+
+netrono.me
