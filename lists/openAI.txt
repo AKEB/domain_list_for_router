@@ -182,3 +182,4 @@ webrtc.chatgpt.com
 ws.chatgpt.com
 www.chatgpt.com
 www.openai.com
+mcpmarket.com
