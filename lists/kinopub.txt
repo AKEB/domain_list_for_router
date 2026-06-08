@@ -22,7 +22,6 @@ pushbr.com
 smarttvcdn.online
 cdntogo.net
 cdn32.lol
-
 5.188.94.0/24
 5.188.188.0/22
 5.199.173.130/32
