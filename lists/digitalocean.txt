@@ -1,13 +1,7 @@
-www.digitalocean.com
-digitalocean.com
-www.digitaloceanspaces.com
-digitaloceanspaces.com
 do.co
+digitalocean.com
+digitaloceanspaces.com
 nginxconfig.io
-cloud.digitalocean.com
-api.digitalocean.com
-cloudsupport.digitalocean.com
-104.19.0.0/16
-35.158.127.0/24
-
 netrono.me
+35.158.127.0/24
+104.19.0.0/16

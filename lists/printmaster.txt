@@ -1,5 +1,5 @@
-api-oversea.qu-in.club.eo.dnse0.com
 api-oversea.qu-in.club
 mdap.mpaas.cn-hangzhou.aliyuncs.com
-lb-bo1ivtaa-739mci468ht5urv0.clb.ap-guangzhou.tencentclb.com
 oss.qu-in.top.w.cdngslb.com
+api-oversea.qu-in.club.eo.dnse0.com
+lb-bo1ivtaa-739mci468ht5urv0.clb.ap-guangzhou.tencentclb.com

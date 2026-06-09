@@ -1,4 +1,4 @@
-brawlstars.inbox.supercell.com
+mo.co
 boombeach.com
 brawlstars.com
 brawlstarsgame.com
@@ -10,13 +10,13 @@ clashroyaleapp.com
 gamesfirsthelsinki.com
 hayday.com
 haydaygame.com
-mo.co
+supercell.helpshift.com
 seeurlpcl.com
 squadbusters.com
 supercell.com
-supercell.helpshift.com
-supercell.net
+brawlstars.inbox.supercell.com
 supercellcreators.com
 supercellgames.com
 supercellid.com
 supercellstore.com
+supercell.net

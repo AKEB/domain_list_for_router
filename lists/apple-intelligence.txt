@@ -1,11 +1,7 @@
 apple-relay.apple.com
+gspe1-ssl.ls.apple.com
 apple-relay.cloudflare.com
 apple-relay.fastly-edge.com
 apple-relay.mask.apple-dns.net
 151.101.0.0/16
-162.159.194.0/24
-162.159.196.0/24
-172.64.68.0/24
-172.64.69.0/24
 172.224.0.0/16
-gspe1-ssl.ls.apple.com

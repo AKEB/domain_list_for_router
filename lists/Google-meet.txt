@@ -1,11 +1,7 @@
-meetings.googleapis.com
-stun.l.google.com
-meet.google.com
 hangouts.clients6.google.com
-stun1.l.google.com
 hangouts.google.com
+stun.l.google.com
+stun1.l.google.com
+meet.google.com
+meetings.googleapis.com
 meet.turns.goog
-74.125.39.0/24
-74.125.247.224/28
-74.125.250.0/24
-2001:4860:4864:5::/64
