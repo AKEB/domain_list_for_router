@@ -1,2 +1,6 @@
 mgvc.com
 23.111.95.236/32
+
+paralabs01.pro
+paralabs.pro
+mglabs.pro
