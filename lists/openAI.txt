@@ -26,3 +26,4 @@ openaicom.imgix.net
 d.docs.live.net
 openaicomproductionae4b.blob.core.windows.net
 openai.org
+108.156.22.0/24
