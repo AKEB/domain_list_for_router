@@ -1,0 +1,9 @@
+CURRENT LIST INTERSECTIONS REPORT
+
+Invalid entries: 0
+
+Duplicate domains across files: 0
+
+Domain parent-child overlaps: 0
+
+Network overlaps (narrower/duplicate): 0

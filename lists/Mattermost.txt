@@ -1,4 +1,3 @@
 pdat.matterlytics.com
 mattermost.com
-d3r1ild9aa68qq.cloudfront.net
 18.165.122.0/24

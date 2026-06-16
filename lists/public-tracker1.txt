@@ -168,7 +168,6 @@ bithq.org
 bluebird-hd.org
 concen.org
 bttracker.debian.org
-tracker.dler.org
 tracker.dmcomic.org
 share.dmhy.org
 tr4ck3r.duckdns.org

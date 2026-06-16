@@ -4,4 +4,3 @@ digitaloceanspaces.com
 nginxconfig.io
 netrono.me
 35.158.127.0/24
-104.19.0.0/16

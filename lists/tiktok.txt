@@ -21,8 +21,6 @@ ttwstatic.com
 tiktokv.eu
 tiktokw.eu
 musical.ly
-tiktokcdn.com.akamaized.net
-p16-tiktokcdn-com.akamaized.net
 tiktokv.com.edgekey.net
 tiktokcdn.com.edgesuite.net
 tiktokcdn-us.com.edgesuite.net

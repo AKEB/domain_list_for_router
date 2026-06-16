@@ -79,7 +79,6 @@ zone-torrent.net
 tracker.open-internet.nl
 tracker.picotorrent.one
 zupix.online
-tracker.zupix.online
 ws.peer.ooo
 dler.org
 tracker.ipv6tracker.org

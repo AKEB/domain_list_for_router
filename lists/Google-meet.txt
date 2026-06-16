@@ -1,7 +1,6 @@
 hangouts.clients6.google.com
 hangouts.google.com
-stun.l.google.com
-stun1.l.google.com
+l.google.com
 meet.google.com
 meetings.googleapis.com
 meet.turns.goog

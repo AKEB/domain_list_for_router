@@ -1,4 +1,3 @@
-cognito-idp.us-east-1.amazonaws.com
 cpl.iubenda.com
 luscii.com
 myomron.com
@@ -10,7 +9,6 @@ omronhealthcare-ap.com
 omronhealthcare.zendesk.com
 eul.stape.io
 cpl-iubenda.b-cdn.net
-35.242.151.7
-104.18.11.9
-138.199.24.219
-176.34.243.233
+35.242.151.7/32
+138.199.24.219/32
+176.34.243.233/32

@@ -30,8 +30,6 @@ ggpht.cn
 youtube.com.co
 youtube.co
 ggpht.com
-wide-youtube.l.google.com
-youtube-ui.l.google.com
 youtube.googleapis.com
 youtubeembeddedplayer.googleapis.com
 youtubei.googleapis.com
@@ -39,7 +37,6 @@ yt3.googleusercontent.com
 googlevideo.com
 withyoutube.com
 youtube.com
-ads.youtube.com
 youtube-nocookie.com
 youtubeeducation.com
 youtubefanfest.com

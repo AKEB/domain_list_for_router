@@ -21,8 +21,6 @@ instagify.com
 instagmania.com
 instagor.com
 instagram.com
-graph.instagram.com
-graph-fallback.instagram.com
 instagram-brand.com
 instagram-engineering.com
 instagram-help.com

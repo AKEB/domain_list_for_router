@@ -7,7 +7,6 @@ alkalimakersuite-pa.clients6.google.com
 webchannel-alkalimakersuite-pa.clients6.google.com
 gemini.google.com
 jules.google.com
-www3.l.google.com
 labs.google.com
 makersuite.google.com
 notebooklm.google.com
@@ -37,12 +36,7 @@ notebooklm.google
 opal.google
 stash.kopano.io
 azure.net
-codesigning.azure.net
-eastus.codesigning.azure.net
-api-prod.eastus.codesigning.azure.net
-eus.codesigning.azure.net
 trafficmanager.net
-atm-prod-acsfrontend-eus.trafficmanager.net
 ai.studio
 up-gemini
 34.8.221.189

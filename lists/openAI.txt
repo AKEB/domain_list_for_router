@@ -12,7 +12,6 @@ grok.com
 mcpmarket.com
 mobile.events.data.microsoft.com
 oaistatic.com
-cdn.oaistatic.com
 oaiusercontent.com
 openai.com
 sora.com
