@@ -1,0 +1,2 @@
+smtp.gmail.com
+imap.gmail.com

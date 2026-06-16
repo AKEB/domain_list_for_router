@@ -3,4 +3,3 @@ mglabs.pro
 paralabs.pro
 paralabs01.pro
 23.111.95.236/32
-smtp.gmail.com
