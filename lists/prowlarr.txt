@@ -6,6 +6,7 @@ tracker.network
 bitru.org
 rutor.org
 rutracker.ru
+lrclib.net
 68.183.0.0/16
 75.2.0.0/16
 139.59.0.0/16
