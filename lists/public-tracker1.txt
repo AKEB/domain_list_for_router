@@ -126,7 +126,11 @@ denis.stalker.upeer.me
 beertracker.ml
 t1.aag.moe
 anidex.moe
-tr.bangumi.moe
+bangumi.moe
+extratorrent.st
+extratorrent.ninjaproxy1.com
+extratorrent.proxyninja.org
+extratorrent.proxyninja.net
 leet-tracker.moe
 0d.kebhana.mx
 ali213.net
