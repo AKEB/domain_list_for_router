@@ -5,6 +5,7 @@ cdn.auth0.com
 browser-intake-datadoghq.com
 chat.com
 chatgpt.com
+cursor.sh
 claudeusercontent.com
 perplexity-ai.cloudflareaccess.com
 crixet.com
