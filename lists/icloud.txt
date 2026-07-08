@@ -51,3 +51,5 @@ icloud.se
 icloud.si
 icloud.sk
 icloud.vn
+172.225.0.0/16
+172.226.0.0/16
