@@ -12,6 +12,7 @@ smarttvcdn.online
 ahc.ovh
 gfw.ovh
 kino.pub
+kino.watch
 m.staticdn.site
 cdn-service.space
 5.188.94.0/24
