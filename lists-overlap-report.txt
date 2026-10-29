@@ -1,6 +1,7 @@
 CURRENT LIST INTERSECTIONS REPORT
 
-Invalid entries: 0
+Invalid entries: 1
+  - work.txt:1 -> tрl.gе
 
 Duplicate domains across files: 0
 

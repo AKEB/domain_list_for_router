@@ -49,12 +49,15 @@ httpsfacebook.com
 httpwwwfacebook.com
 liverail.com
 markzuckerberg.com
+meta.com
 midentsolutions.com
 mobilefacebook.com
 moneywithfacebook.com
 myfbfans.com
 newsfeed.com
 nextstop.com
+oculus.com
+oculuscdn.com
 reachtheworldonfacebook.com
 redkix.com
 shopfacebook.com
@@ -78,7 +81,7 @@ zuckerberg.com
 friendbook.info
 hifacebook.info
 klik.me
-fbcdn-a.akamaihd.net
+akamaihd.net
 freebasics.net
 freefacebook.net
 freefacebookads.net
